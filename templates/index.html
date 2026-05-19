@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Adjective Collector</title>
+</head>
+<body>
+    <h1>Adjective Collector</h1>
+
+    <form method="post">
+        <input type="text" name="word" placeholder="Enter a word">
+        <button type="submit">Add</button>
+    </form>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <p>[{{ category }}] {{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <ul>
+        {% for word, count in adjectives.items() %}
+            <li>{{ word }} — {{ count }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
