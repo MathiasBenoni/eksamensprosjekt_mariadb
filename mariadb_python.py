@@ -31,10 +31,12 @@ def get_adjectives():
 def write(word):
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute(
-        "INSERT INTO adjectives (adjective, counter) VALUES (?, 1) ON DUPLICATE KEY UPDATE counter = counter + 1;",
-        (word,)
-    )
+    cur.execute("SELECT counter FROM adjectives WHERE adjective = ?", (word,))
+    row = cur.fetchone()
+    if row:
+        cur.execute("UPDATE adjectives SET counter = counter + 1 WHERE adjective = ?", (word,))
+    else:
+        cur.execute("INSERT INTO adjectives (adjective, counter) VALUES (?, 1)", (word,))
     conn.commit()
     cur.close()
     conn.close()
