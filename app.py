@@ -15,6 +15,7 @@ def add():
     if not word:
         flash("Empty input!", "error")
         return redirect(url_for("index"))
+
     write(word)
     flash(f'"{word}" added!', "success")
     return redirect(url_for("index"))
