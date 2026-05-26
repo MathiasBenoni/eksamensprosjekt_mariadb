@@ -17,7 +17,7 @@ def get_connection():
         return conn
     except mariadb.Error as e:
         print(f"Error: {e}")
-        sys.exit(1)
+        raise RuntimeError(f"DB connection failed: {e}")
 
 def get_adjectives():
     conn = get_connection()
