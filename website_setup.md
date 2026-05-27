@@ -169,4 +169,4 @@ Flask will start and be accessible from your Mac or any device on the same netwo
 http://192.168.64.X:5000
 ```
 
-Where `192.168.64.X` is the Flask VM's IP.
+Where `192.168.X.X` is the Flask VM's IP.
