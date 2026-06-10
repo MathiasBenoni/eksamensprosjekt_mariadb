@@ -6,23 +6,52 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Adjective Collector</h1>
+<div class="container">
+    <header>
+        <h1>Adjective Collector</h1>
+        <button id="theme-toggle" aria-label="Toggle dark/light mode">Dark mode</button>
+    </header>
 
     <form method="post">
-        <input type="text" name="word" placeholder="Enter a word">
+        <input type="text" name="word" placeholder="Enter an adjective" autofocus>
         <button type="submit">Add</button>
     </form>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% for category, message in messages %}
-            <p>[{{ category }}] {{ message }}</p>
+            <p class="flash {{ category }}">{{ message }}</p>
         {% endfor %}
     {% endwith %}
 
     <ul>
         {% for word, count in adjectives.items() %}
-            <li>{{ word }} — {{ count }}</li>
+            <li>
+                <span class="word">{{ word }}</span>
+                <span class="count">{{ count }}</span>
+            </li>
+        {% else %}
+            <li class="empty">No adjectives yet — be the first!</li>
         {% endfor %}
     </ul>
+</div>
+
+<script>
+    const toggle = document.getElementById('theme-toggle');
+    const root   = document.documentElement;
+
+    const saved = localStorage.getItem('theme') || 'light';
+    applyTheme(saved);
+
+    toggle.addEventListener('click', () => {
+        const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        localStorage.setItem('theme', next);
+    });
+
+    function applyTheme(theme) {
+        root.dataset.theme   = theme;
+        toggle.textContent   = theme === 'dark' ? 'Light mode' : 'Dark mode';
+    }
+</script>
 </body>
 </html>
