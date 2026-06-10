@@ -70,7 +70,7 @@ No. Users cannot delete submissions. Contact the application operator if you nee
 No. The application only stores the word itself and its submission count. See the [Privacy Policy](privacy_policy.md) for full details.
 
 **What kind of words should I submit?**
-Any single adjective in any language. Please keep submissions appropriate — see the [Terms of Use](terms_of_use.md) for guidelines.
+Any single adjective in the english language. Please keep submissions appropriate — see the [Terms of Use](terms_of_use.md) for guidelines.
 
 ---
 
