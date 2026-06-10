@@ -6,51 +6,66 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-<div class="container">
-    <header>
-        <h1>Adjective Collector</h1>
-        <button id="theme-toggle" aria-label="Toggle dark/light mode">Dark mode</button>
-    </header>
 
-    <form method="post">
-        <input type="text" name="word" placeholder="Enter an adjective" autofocus>
-        <button type="submit">Add</button>
-    </form>
+<header>
+    <h1>Adjective Collector</h1>
+    <label class="theme-switch" aria-label="Toggle dark mode">
+        <input type="checkbox" id="theme-toggle">
+        <span class="slider"></span>
+        <span class="switch-label" id="switch-label">Dark mode</span>
+    </label>
+</header>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% for category, message in messages %}
-            <p class="flash {{ category }}">{{ message }}</p>
-        {% endfor %}
-    {% endwith %}
+<main>
+    <div class="card">
 
-    <ul>
-        {% for word, count in adjectives.items() %}
-            <li>
-                <span class="word">{{ word }}</span>
-                <span class="count">{{ count }}</span>
-            </li>
-        {% else %}
-            <li class="empty">No adjectives yet — be the first!</li>
-        {% endfor %}
-    </ul>
-</div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <p class="flash {{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="post">
+            <input type="text" name="word" placeholder="Enter an adjective" autofocus>
+            <button type="submit">Add</button>
+        </form>
+
+        <div class="wordcloud-wrapper">
+            <div class="wordcloud-area">
+                <span class="wordcloud-hint">Wordcloud</span>
+            </div>
+            <div class="debug-overlay">
+                {% for word, count in adjectives.items() %}
+                    <div class="debug-row">
+                        <span class="dw">{{ word }}</span>
+                        <span class="dc">{{ count }}</span>
+                    </div>
+                {% else %}
+                    <div class="debug-empty">No adjectives yet</div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</main>
 
 <script>
     const toggle = document.getElementById('theme-toggle');
+    const label  = document.getElementById('switch-label');
     const root   = document.documentElement;
 
-    const saved = localStorage.getItem('theme') || 'light';
-    applyTheme(saved);
+    applyTheme(localStorage.getItem('theme') || 'light');
 
-    toggle.addEventListener('click', () => {
-        const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    toggle.addEventListener('change', () => {
+        const next = toggle.checked ? 'dark' : 'light';
         applyTheme(next);
         localStorage.setItem('theme', next);
     });
 
     function applyTheme(theme) {
-        root.dataset.theme   = theme;
-        toggle.textContent   = theme === 'dark' ? 'Light mode' : 'Dark mode';
+        root.dataset.theme = theme;
+        toggle.checked     = theme === 'dark';
+        label.textContent  = theme === 'dark' ? 'Light mode' : 'Dark mode';
     }
 </script>
 </body>
