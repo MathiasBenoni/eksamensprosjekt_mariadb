@@ -17,7 +17,7 @@ def get_connection():
         return conn
     except mariadb.Error as e:
         print(f"Error: {e}")
-        sys.exit(1)
+        raise RuntimeError(f"DB connection failed: {e}")
 
 def get_adjectives():
     conn = get_connection()
@@ -26,15 +26,17 @@ def get_adjectives():
     results = cur.fetchall()
     cur.close()
     conn.close()
-    return {adj: count for adj, count in results}
+    return {adj: count for adj, count in results}   # First value from results goes into adj, second value goes into count
 
 def write(word):
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute(
-        "INSERT INTO adjectives (adjective, counter) VALUES (?, 1) ON DUPLICATE KEY UPDATE counter = counter + 1;",
-        (word,)
-    )
+    cur.execute("SELECT counter FROM adjectives WHERE adjective = ?", (word,))
+    row = cur.fetchone()
+    if row:
+        cur.execute("UPDATE adjectives SET counter = counter + 1 WHERE adjective = ?", (word,))
+    else:
+        cur.execute("INSERT INTO adjectives (adjective, counter) VALUES (?, 1)", (word,))
     conn.commit()
     cur.close()
     conn.close()

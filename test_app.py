@@ -29,8 +29,7 @@ class TestGetAdjectives:
         # Tell the fake cursor what to return when fetchall() is called
         mock_cur.fetchall.return_value = [("happy", 3), ("sad", 1)]
 
-        # patch() temporarily replaces get_connection with a fake that returns mock_conn
-        # Inside this block, real MariaDB is never touched
+        # Set the structure of the fake DB to the structure of the real one
         with patch("mariadb_python.get_connection", return_value=mock_conn):
             result = mariadb_python.get_adjectives()
 
