@@ -64,4 +64,4 @@ To the maximum extent permitted by law, the operator shall not be liable for any
 
 For questions about these Terms of Use, contact the application operator at:
 
-**Email:** [insert contact email]
+**Email:** mamoa112@osloskolen.no

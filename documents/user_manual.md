@@ -7,7 +7,7 @@
 
 ## 1. What Is Adjective Collector?
 
-Adjective Collector is a web application where users can submit adjectives — descriptive words such as *happy*, *brave*, or *curious*. The app collects submissions from everyone who visits the page and displays a live dashboard showing all submitted adjectives ranked by how often they have been submitted.
+Adjective Collector is a web application where users can submit adjectives — descriptive words such as _happy_, _brave_, or _curious_. The app collects submissions from everyone who visits the page and displays a live dashboard showing all submitted adjectives ranked by how often they have been submitted.
 
 ---
 
@@ -25,6 +25,7 @@ No account or login is required. Simply open the application in your web browser
 4. A confirmation message will appear confirming your word was added.
 
 **What happens behind the scenes:**
+
 - Your input is trimmed of any extra spaces and converted to lowercase automatically.
 - If the word has never been submitted before, it is added to the database with a count of 1.
 - If the word already exists, its submission counter is incremented by 1.
@@ -39,20 +40,20 @@ After submitting (or on page load), the dashboard displays all collected adjecti
 
 ## 5. Known Limitations
 
-| Limitation | Details |
-|---|---|
-| Single words only | Phrases or sentences will be stored as-is but are not intended use |
-| No editing | You cannot edit or delete a word you have submitted |
-| No undo | Submissions cannot be reversed by the user |
-| Case-insensitive | `Happy`, `HAPPY`, and `happy` are all treated as the same word |
-| No duplicates | Each unique word has one entry; re-submitting it increments the counter |
+| Limitation        | Details                                                                 |
+| ----------------- | ----------------------------------------------------------------------- |
+| Single words only | Phrases or sentences will be stored as-is but are not intended use      |
+| No editing        | You cannot edit or delete a word you have submitted                     |
+| No undo           | Submissions cannot be reversed by the user                              |
+| Case-insensitive  | `Happy`, `HAPPY`, and `happy` are all treated as the same word          |
+| No duplicates     | Each unique word has one entry; re-submitting it increments the counter |
 
 ---
 
 ## 6. Error Messages
 
-| Message | Cause | Solution |
-|---|---|---|
+| Message        | Cause                                     | Solution                            |
+| -------------- | ----------------------------------------- | ----------------------------------- |
 | "Empty input!" | You submitted the form with nothing typed | Type an adjective before submitting |
 
 ---
@@ -77,4 +78,4 @@ Any single adjective in any language. Please keep submissions appropriate — se
 
 For questions, issues, or requests, contact the application operator at:
 
-**Email:** [insert contact email]
+**Email:** mamoa112@osloskolen.no
