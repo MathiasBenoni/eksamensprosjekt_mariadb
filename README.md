@@ -20,16 +20,15 @@ Also planned to do a wordcloud for all the adjectives, instead of just a word
 
 ## TODO's
 
-- [x] Update database
-- [x] wordcloud (both for light- and dark mode)
-- [x] Dark / light mode
-- [x] Styling
+- [ ] Update database
+- [ ] wordcloud (both for light- and dark mode)
+- [ ] Dark / light mode
+- [ ] Styling
 - [ ] Get some other feature in
 
 ### Far fetched ideas
 
-- [ ] Docker
-- [x] AI to accept only adjectives
+- [ ] AI to accept only adjectives
 
 # The installation
 

@@ -93,4 +93,4 @@ Any future changes to this privacy policy will be reflected in an updated versio
 
 For any questions regarding this privacy policy, please contact the application operator at:
 
-**Email:** [insert contact email]
+**Email:** mamoa112@osloskolen.no
