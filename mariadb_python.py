@@ -26,7 +26,7 @@ def get_adjectives():
     results = cur.fetchall()
     cur.close()
     conn.close()
-    return {adj: count for adj, count in results}
+    return {adj: count for adj, count in results}   # First value from results goes into adj, second value goes into count
 
 def write(word):
     conn = get_connection()
