@@ -1,18 +1,38 @@
 # A website using mariaDB
 
+# Description
+
+Hi, we run a parenting advice and community forum aimed at mothers and fathers of children aged 0–10. Our audience is mostly 25–40 year olds, a mix of first-time and experienced parents. The tone of our site is warm, supportive, and family-friendly.
+We would like to embed your adjective collector on our front page. Here are our requirements:
+• The prompt should be: "Which word best describes our site?"
+• We need a profanity filter — our audience includes people browsing at work or with kids nearby
+• Only single words should be accepted, no phrases
+• We want the results displayed as a top 10 list, not a full dump of everything submitted
+• We would like a minimum character count of 3 to avoid junk submissions like "ok" or "eh"
+• The moderator dashboard should let us manually remove adjectives we find inappropriate
+Let us know if you need anything else from us.
+
+For a parenting site the tone should be warm and approachable, not clinical or cold. I would suggest:
+
+Light mode:
+
+- Background: warm off-white #FAF7F2
+- Primary accent: soft teal #4A9B8E
+- Text: dark warm grey #2C2C2C
+- Card/surface: #FFFFFF
+- Muted text: #7A7A7A
+
+Dark mode:
+
+- Background: deep warm navy #1A1E2E
+- Primary accent: same teal but slightly brighter #5BBCAE
+- Text: #EEEAE4
+- Card/surface: #252A3A
+- Muted text: #8A8FA0
+
+The teal works well because it feels calm and trustworthy without being a cold corporate blue.
+
 ## A website that displays the most common adjective describing the website
-
-The dashboard:
-
-<img src="/images/dashboard.png" alt="Image of the dashboard on startup" width="400">
-
-The wordcloud:
-
-<img src="/images/wordcloud.png" alt="Image of the wordcloud" width="300">
-
-Lightmode:
-
-<img src="/images/image_light.png" alt="Lightmode" width="400">
 
 This website uses python as backend. `app.py` is connected to the HTML. `app.py` then sends this info to `mariadb_python.py`, this script then takes the adjective and stores it in the database. The database is to be updated.
 
@@ -20,14 +40,11 @@ Also planned to do a wordcloud for all the adjectives, instead of just a word
 
 ## TODO's
 
-- [ ] Update database
+- [x] Update database
 - [ ] wordcloud (both for light- and dark mode)
 - [ ] Dark / light mode
 - [ ] Styling
 - [ ] Get some other feature in
-
-### Far fetched ideas
-
 - [ ] AI to accept only adjectives
 
 # The installation

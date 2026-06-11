@@ -64,18 +64,40 @@ class TestWrite:
         mock_conn = MagicMock()
         mock_cur = mock_conn.cursor.return_value
 
+        # Simulate word not existing yet — SELECT returns nothing, so the INSERT branch is taken
+        # Without this, MagicMock returns a truthy MagicMock for fetchone(), which would
+        # make write() take the UPDATE branch and call execute() twice, failing the test
+        mock_cur.fetchone.return_value = None
+
         with patch("mariadb_python.get_connection", return_value=mock_conn):
             mariadb_python.write("brave")
 
-        # Verify execute() was called once and the SQL + argument look correct
-        mock_cur.execute.assert_called_once()
-        call_args = mock_cur.execute.call_args   # what arguments execute() was called with
+        # Verify execute() was called twice (SELECT check + INSERT) and the INSERT looks correct
+        assert mock_cur.execute.call_count == 2
+        call_args = mock_cur.execute.call_args   # call_args returns the last call (the INSERT)
         assert "INSERT INTO adjectives" in call_args[0][0]  # [0][0] = first positional arg (the SQL string)
         assert call_args[0][1] == ("brave",)                # [0][1] = second positional arg (the values tuple)
+
+    def test_increments_existing_word(self):
+        mock_conn = MagicMock()
+        mock_cur = mock_conn.cursor.return_value
+
+        # Simulate word already existing — SELECT returns a row, so the UPDATE branch is taken
+        mock_cur.fetchone.return_value = (1,)
+
+        with patch("mariadb_python.get_connection", return_value=mock_conn):
+            mariadb_python.write("brave")
+
+        # execute() is called twice here (SELECT then UPDATE) — check the last call is the UPDATE
+        call_args_list = mock_cur.execute.call_args_list
+        last_call = call_args_list[-1]
+        assert "UPDATE adjectives" in last_call[0][0]
+        assert last_call[0][1] == ("brave",)
 
     def test_commits(self):
         # If commit() is never called, data is lost — verify it always happens
         mock_conn = MagicMock()
+        mock_conn.cursor.return_value.fetchone.return_value = None  # take the INSERT branch
 
         with patch("mariadb_python.get_connection", return_value=mock_conn):
             mariadb_python.write("brave")
@@ -84,6 +106,7 @@ class TestWrite:
 
     def test_closes_connection(self):
         mock_conn = MagicMock()
+        mock_conn.cursor.return_value.fetchone.return_value = None  # take the INSERT branch
 
         with patch("mariadb_python.get_connection", return_value=mock_conn):
             mariadb_python.write("brave")

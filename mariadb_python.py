@@ -1,9 +1,10 @@
 import mariadb
 import sys
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(Path(__file__).parent / ".env")
 
 def get_connection():
     try:
@@ -11,13 +12,26 @@ def get_connection():
             user=os.getenv("DB_USER"),
             password=os.getenv("DB_PASSWORD"),
             host=os.getenv("DB_HOST", "127.0.0.1"),
-            port=int(os.getenv("DB_PORT", 3306)),
+            port=int(os.getenv("DB_PORT") or 3306),
             database=os.getenv("DB_NAME")
         )
         return conn
     except mariadb.Error as e:
         print(f"Error: {e}")
         raise RuntimeError(f"DB connection failed: {e}")
+
+def ensure_table():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS adjectives (
+            adjective VARCHAR(100) PRIMARY KEY,
+            counter   INT NOT NULL DEFAULT 1
+        )
+    """)
+    conn.commit()
+    cur.close()
+    conn.close()
 
 def get_adjectives():
     conn = get_connection()
@@ -40,3 +54,4 @@ def write(word):
     conn.commit()
     cur.close()
     conn.close()
+    
