@@ -47,6 +47,18 @@ Also planned to do a wordcloud for all the adjectives, instead of just a word
 - [ ] Get some other feature in
 - [ ] AI to accept only adjectives
 
+# Techstack
+
+| Technology                  | Used for                    | Why                                                    |
+| --------------------------- | --------------------------- | ------------------------------------------------------ |
+| Python                      | Backend language            | Familiar and versatile                                 |
+| Flask                       | Web framework               | Lightweight and familiar                               |
+| MariaDB                     | Database                    | Familiar and easy to set up                            |
+| WordCloud                   | Word cloud image generation | Generates visual word clouds from submitted adjectives |
+| Flask-Limiter               | Rate limiting               | Prevents spam submissions                              |
+| Gunicorn                    | Production WSGI server      | More robust than Flask's built-in dev server           |
+| NumPy / Matplotlib / Pillow | WordCloud dependencies      | Required by the WordCloud library                      |
+
 # The installation
 
 ## Create an environment
