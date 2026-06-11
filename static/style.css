@@ -235,3 +235,91 @@ button[type="submit"]:active { transform: scale(0.97); }
     margin-top: auto;
     margin-bottom: auto;
 }
+
+/* ── Footer ─────────────────────────────────────────────── */
+footer {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 1.25rem 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.doc-link {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.15s;
+}
+.doc-link:hover { color: var(--accent); }
+
+/* ── Modal ──────────────────────────────────────────────── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+.modal-overlay[hidden] { display: none; }
+
+.modal-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 680px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.24);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.modal-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.1rem 0.3rem;
+    border-radius: 6px;
+    transition: color 0.15s, background 0.15s;
+}
+.modal-close:hover { color: var(--text); background: var(--border); }
+
+.modal-body {
+    padding: 1.25rem;
+    overflow-y: auto;
+    color: var(--text);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+.modal-body h1, .modal-body h2, .modal-body h3 {
+    color: var(--accent);
+    margin: 1rem 0 0.4rem;
+}
+.modal-body p  { margin-bottom: 0.75rem; }
+.modal-body ul, .modal-body ol { padding-left: 1.25rem; margin-bottom: 0.75rem; }
+.modal-body a  { color: var(--accent); }

@@ -2,3 +2,4 @@ flask
 mariadb
 python-dotenv
 pytest
+markdown

@@ -1,13 +1,26 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from mariadb_python import get_adjectives, write
+import markdown
+from pathlib import Path
 
 app = Flask(__name__)
 app.secret_key = "test"
 
+_DOCS_DIR = Path(__file__).parent / "documents"
+
+def _load_doc(filename):
+    return markdown.markdown(_DOCS_DIR.joinpath(filename).read_text(encoding="utf-8"), extensions=["extra"])
+
 @app.route("/", methods=["GET"])
 def index():
     adjectives = get_adjectives()
-    return render_template("index.html", adjectives=adjectives)
+    return render_template(
+        "index.html",
+        adjectives=adjectives,
+        privacy_html=_load_doc("privacy_policy.md"),
+        terms_html=_load_doc("terms_of_use.md"),
+        manual_html=_load_doc("user_manual.md"),
+    )
 
 @app.route("/", methods=["POST"])
 def add():

@@ -49,6 +49,26 @@
     </div>
 </main>
 
+<footer>
+    <button class="doc-link" data-doc="privacy">Privacy Policy</button>
+    <button class="doc-link" data-doc="terms">Terms of Use</button>
+    <button class="doc-link" data-doc="manual">User Manual</button>
+</footer>
+
+<div id="doc-privacy" hidden>{{ privacy_html | safe }}</div>
+<div id="doc-terms"   hidden>{{ terms_html   | safe }}</div>
+<div id="doc-manual"  hidden>{{ manual_html  | safe }}</div>
+
+<div class="modal-overlay" id="modal-overlay" hidden>
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2 class="modal-title" id="modal-title"></h2>
+            <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body" id="modal-body"></div>
+    </div>
+</div>
+
 <script>
     const toggle = document.getElementById('theme-toggle');
     const label  = document.getElementById('switch-label');
@@ -66,6 +86,34 @@
         root.dataset.theme = theme;
         toggle.checked     = theme === 'dark';
         label.textContent  = theme === 'dark' ? 'Light mode' : 'Dark mode';
+    }
+
+    const docMeta = {
+        privacy: { title: 'Privacy Policy', id: 'doc-privacy' },
+        terms:   { title: 'Terms of Use',   id: 'doc-terms'   },
+        manual:  { title: 'User Manual',    id: 'doc-manual'  },
+    };
+    const overlay   = document.getElementById('modal-overlay');
+    const modalBody = document.getElementById('modal-body');
+    const modalTitle = document.getElementById('modal-title');
+
+    document.querySelectorAll('.doc-link').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const { title, id } = docMeta[btn.dataset.doc];
+            modalTitle.textContent = title;
+            modalBody.innerHTML = document.getElementById(id).innerHTML;
+            overlay.removeAttribute('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+    });
+
+    document.getElementById('modal-close').addEventListener('click', closeModal);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    function closeModal() {
+        overlay.setAttribute('hidden', '');
+        document.body.style.overflow = '';
     }
 </script>
 </body>

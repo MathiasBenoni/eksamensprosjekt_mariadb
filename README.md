@@ -235,4 +235,6 @@ python -m spacy download en_core_web_sm # Only a spesific liberary is required
 pip install flask-limiter # This is for people not to spam your website
 
 pip install gunicorn # for a more robust online server
+
+pip install markdown # For rendering Privacy Policy, Terms of Use, and User Manual as HTML
 ```
