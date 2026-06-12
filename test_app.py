@@ -147,16 +147,23 @@ class TestAddRoute:
     def test_valid_word_redirects(self, client):
         # patch("app.write") replaces write() with a fake so no DB call happens
         # "as mock_write" gives us a reference so we can inspect calls later
-        with patch("app.write") as mock_write:
+        with patch("app._is_adjective", return_value=True), patch("app.write") as mock_write:
             response = client.post("/", data={"word": "brave"})
         assert response.status_code == 302          # 302 = redirect (expected after POST)
         mock_write.assert_called_once_with("brave") # verify write() was called with correct word
 
     def test_strips_and_lowercases(self, client):
         # app.py does .strip().lower() — verify "  BRAVE  " becomes "brave"
-        with patch("app.write") as mock_write:
+        with patch("app._is_adjective", return_value=True), patch("app.write") as mock_write:
             client.post("/", data={"word": "  BRAVE  "})
         mock_write.assert_called_once_with("brave")
+
+    def test_non_adjective_rejected(self, client):
+        # spaCy says the word is not an adjective — write() must NOT be called
+        with patch("app._is_adjective", return_value=False), patch("app.write") as mock_write:
+            response = client.post("/", data={"word": "pizza"})
+        mock_write.assert_not_called()
+        assert response.status_code == 302
 
     def test_empty_word_no_write(self, client):
         # Empty string should be rejected — write() must NOT be called

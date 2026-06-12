@@ -2,11 +2,29 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from mariadb_python import get_adjectives, write
 from wordcloud_python import make_cloud
 import markdown
+import spacy
 import time
 from pathlib import Path
 
 app = Flask(__name__)
 app.secret_key = "test"
+
+nlp = spacy.load("en_core_web_sm")
+
+def _is_adjective(word):
+        
+    sentences = [
+        f"This website is so {word}.",
+        f"{word}, that is good",
+        f"It was very {word}.",
+    ]
+    for sentence in sentences:
+        doc = nlp(sentence)
+        for token in doc:
+            if token.text == word:
+                if token.pos_ in ("ADJ", "ADV"):
+                    return True
+    return False
 
 _DOCS_DIR = Path(__file__).parent / "documents"
 
@@ -33,13 +51,25 @@ def index():
 @app.route("/", methods=["POST"])
 def add():
     word = request.form.get("word", "").strip().lower()
+
+    if len(word) <= 3:
+        flash(f'"{word}" doesn\'t look like an adjective!', "error")
+        return redirect(url_for("index"))
+    
+    if _is_adjective(word) == True:
+        write(word)
+        flash(f'"{word}" added!', "success")
+        return redirect(url_for("index"))
+
     if not word:
         flash("Empty input!", "error")
         return redirect(url_for("index"))
 
-    write(word)
-    flash(f'"{word}" added!', "success")
-    return redirect(url_for("index"))
+    if not _is_adjective(word):
+        flash(f'"{word}" doesn\'t look like an adjective!', "error")
+        return redirect(url_for("index"))
+
+    
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
