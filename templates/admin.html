@@ -38,18 +38,20 @@
                     <tr>
                         <th scope="col">Word</th>
                         <th scope="col">Count</th>
+                        <th scope="col">Submitted by</th>
                         <th scope="col"><span class="sr-only">Actions</span></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for word, count in adjectives | dictsort(by='value', reverse=true) %}
+                    {% for adj in adjectives %}
                         <tr>
-                            <td>{{ word }}</td>
-                            <td class="count">{{ count }}</td>
+                            <td>{{ adj.adjective }}</td>
+                            <td class="count">{{ adj.counter }}</td>
+                            <td>{{ adj.username or "Anonymous" }}</td>
                             <td>
                                 <form method="post" action="{{ url_for('admin_delete') }}">
-                                    <input type="hidden" name="word" value="{{ word }}">
-                                    <button type="submit" class="delete-btn" aria-label="Delete {{ word }}">Delete</button>
+                                    <input type="hidden" name="word" value="{{ adj.adjective }}">
+                                    <button type="submit" class="delete-btn" aria-label="Delete {{ adj.adjective }}">Delete</button>
                                 </form>
                             </td>
                         </tr>

@@ -24,17 +24,20 @@ def ensure_table():
     conn = get_connection()
     cur = conn.cursor()
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS adjectives (
-            adjective VARCHAR(100) PRIMARY KEY,
-            counter   INT NOT NULL DEFAULT 1
-        );
-    """)
-    cur.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id            INT AUTO_INCREMENT PRIMARY KEY,
             username      VARCHAR(50) UNIQUE NOT NULL,
             password_hash VARCHAR(255) NOT NULL,
             role          VARCHAR(20) NOT NULL DEFAULT 'user'
+        );
+    """)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS adjectives (
+            id        INT AUTO_INCREMENT PRIMARY KEY,
+            adjective VARCHAR(50) UNIQUE NOT NULL,
+            counter   INT NOT NULL DEFAULT 1,
+            user_id   INT,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
         );
     """)
     conn.commit()
@@ -54,15 +57,6 @@ def create_user(username: str, password_hash: str, role: str = "user") -> None:
     conn.close()
 
 
-def delete_adjective(word: str) -> None:
-    conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("DELETE FROM adjectives WHERE adjective = ?", (word,))
-    conn.commit()
-    cur.close()
-    conn.close()
-
-
 def get_user(username: str):
     conn = get_connection()
     cur = conn.cursor()
@@ -77,6 +71,7 @@ def get_user(username: str):
         return None
     return {"id": row[0], "username": row[1], "password_hash": row[2], "role": row[3]}
 
+
 def get_adjectives():
     conn = get_connection()
     cur = conn.cursor()
@@ -84,9 +79,28 @@ def get_adjectives():
     results = cur.fetchall()
     cur.close()
     conn.close()
-    return {adj: count for adj, count in results}   # First value from results goes into adj, second value goes into count
+    return {adj: count for adj, count in results}
 
-def write(word):
+
+def get_adjectives_admin():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT a.adjective, a.counter, u.username
+        FROM adjectives a
+        LEFT JOIN users u ON a.user_id = u.id
+        ORDER BY a.counter DESC;
+    """)
+    results = cur.fetchall()
+    cur.close()
+    conn.close()
+    return [
+        {"adjective": adj, "counter": count, "username": username}
+        for adj, count, username in results
+    ]
+
+
+def write(word: str, user_id: int = None) -> None:
     conn = get_connection()
     cur = conn.cursor()
     cur.execute("SELECT counter FROM adjectives WHERE adjective = ?", (word,))
@@ -94,8 +108,19 @@ def write(word):
     if row:
         cur.execute("UPDATE adjectives SET counter = counter + 1 WHERE adjective = ?", (word,))
     else:
-        cur.execute("INSERT INTO adjectives (adjective, counter) VALUES (?, 1)", (word,))
+        cur.execute(
+            "INSERT INTO adjectives (adjective, counter, user_id) VALUES (?, 1, ?)",
+            (word, user_id)
+        )
     conn.commit()
     cur.close()
     conn.close()
-    
+
+
+def delete_adjective(word: str) -> None:
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM adjectives WHERE adjective = ?", (word,))
+    conn.commit()
+    cur.close()
+    conn.close()

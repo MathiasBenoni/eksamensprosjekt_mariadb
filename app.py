@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from mariadb_python import get_adjectives, write, create_user, get_user, delete_adjective
+from mariadb_python import get_adjectives, get_adjectives_admin, write, create_user, get_user, delete_adjective
 from wordcloud_python import make_cloud
 from hashing import hash_password, check_password
 import markdown
@@ -58,7 +58,7 @@ def add():
         return redirect(url_for("index"))
     
     if _is_adjective(word) == True:
-        write(word)
+        write(word, session.get("user_id"))
         flash(f'"{word}" added!', "success")
         return redirect(url_for("index"))
 
@@ -115,7 +115,7 @@ def admin():
     if session.get("role") != "admin":
         flash("Admin access required.", "error")
         return redirect(url_for("index"))
-    adjectives = get_adjectives()
+    adjectives = get_adjectives_admin()
     return render_template("admin.html", adjectives=adjectives)
 
 
