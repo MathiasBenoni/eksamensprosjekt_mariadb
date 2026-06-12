@@ -8,7 +8,12 @@
 <body>
 
 <header>
-    <h1>Adjective Collector</h1>
+    <h1><a href="{{ url_for('index') }}" class="site-title">Adjective Collector</a></h1>
+    <label class="theme-switch" aria-label="Toggle dark mode">
+        <input type="checkbox" id="theme-toggle">
+        <span class="slider"></span>
+        <span class="switch-label" id="switch-label">Dark mode</span>
+    </label>
 </header>
 
 <main>
@@ -37,5 +42,24 @@
     </div>
 </main>
 
+<script>
+    const toggle = document.getElementById('theme-toggle');
+    const label  = document.getElementById('switch-label');
+    const root   = document.documentElement;
+
+    applyTheme(localStorage.getItem('theme') || 'light');
+
+    toggle.addEventListener('change', () => {
+        const next = toggle.checked ? 'dark' : 'light';
+        applyTheme(next);
+        localStorage.setItem('theme', next);
+    });
+
+    function applyTheme(theme) {
+        root.dataset.theme = theme;
+        toggle.checked     = theme === 'dark';
+        label.textContent  = theme === 'dark' ? 'Light mode' : 'Dark mode';
+    }
+</script>
 </body>
 </html>

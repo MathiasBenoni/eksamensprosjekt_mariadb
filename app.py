@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from mariadb_python import get_adjectives, write, create_user, get_user
+from mariadb_python import get_adjectives, write, create_user, get_user, delete_adjective
 from wordcloud_python import make_cloud
 from hashing import hash_password, check_password
 import markdown
@@ -108,6 +108,27 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for("index"))
+
+
+@app.route("/admin")
+def admin():
+    if session.get("role") != "admin":
+        flash("Admin access required.", "error")
+        return redirect(url_for("index"))
+    adjectives = get_adjectives()
+    return render_template("admin.html", adjectives=adjectives)
+
+
+@app.route("/admin/delete", methods=["POST"])
+def admin_delete():
+    if session.get("role") != "admin":
+        flash("Admin access required.", "error")
+        return redirect(url_for("index"))
+    word = request.form.get("word", "")
+    if word:
+        delete_adjective(word)
+        flash(f'"{word}" deleted.', "success")
+    return redirect(url_for("admin"))
 
 
 

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin – Adjective Collector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+    <h1><a href="{{ url_for('index') }}" class="site-title">Adjective Collector</a></h1>
+    <nav class="header-nav" aria-label="Site navigation">
+        <span class="nav-user">{{ session.username }}</span>
+        <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+        <a href="{{ url_for('logout') }}" class="nav-link">Log out</a>
+    </nav>
+    <label class="theme-switch" aria-label="Toggle dark mode">
+        <input type="checkbox" id="theme-toggle">
+        <span class="slider"></span>
+        <span class="switch-label" id="switch-label">Dark mode</span>
+    </label>
+</header>
+
+<main>
+    <div class="card">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <p class="flash {{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        <h2>Manage Adjectives</h2>
+
+        {% if adjectives %}
+            <table class="admin-table" aria-label="Adjectives database">
+                <thead>
+                    <tr>
+                        <th scope="col">Word</th>
+                        <th scope="col">Count</th>
+                        <th scope="col"><span class="sr-only">Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for word, count in adjectives | dictsort(by='value', reverse=true) %}
+                        <tr>
+                            <td>{{ word }}</td>
+                            <td class="count">{{ count }}</td>
+                            <td>
+                                <form method="post" action="{{ url_for('admin_delete') }}">
+                                    <input type="hidden" name="word" value="{{ word }}">
+                                    <button type="submit" class="delete-btn" aria-label="Delete {{ word }}">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="empty-hint">No adjectives in the database yet.</p>
+        {% endif %}
+
+    </div>
+</main>
+
+<script>
+    const toggle = document.getElementById('theme-toggle');
+    const label  = document.getElementById('switch-label');
+    const root   = document.documentElement;
+
+    applyTheme(localStorage.getItem('theme') || 'light');
+
+    toggle.addEventListener('change', () => {
+        const next = toggle.checked ? 'dark' : 'light';
+        applyTheme(next);
+        localStorage.setItem('theme', next);
+    });
+
+    function applyTheme(theme) {
+        root.dataset.theme = theme;
+        toggle.checked     = theme === 'dark';
+        label.textContent  = theme === 'dark' ? 'Light mode' : 'Dark mode';
+    }
+</script>
+</body>
+</html>

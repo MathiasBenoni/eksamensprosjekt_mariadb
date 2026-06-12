@@ -42,13 +42,22 @@ def ensure_table():
     conn.close()
 
 
-def create_user(username: str, password_hash: str) -> None:
+def create_user(username: str, password_hash: str, role: str = "user") -> None:
     conn = get_connection()
     cur = conn.cursor()
     cur.execute(
-        "INSERT INTO users (username, password_hash) VALUES (?, ?)",
-        (username, password_hash)
+        "INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)",
+        (username, password_hash, role)
     )
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
+def delete_adjective(word: str) -> None:
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM adjectives WHERE adjective = ?", (word,))
     conn.commit()
     cur.close()
     conn.close()
