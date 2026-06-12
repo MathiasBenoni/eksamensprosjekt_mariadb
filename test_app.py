@@ -76,7 +76,7 @@ class TestWrite:
         assert mock_cur.execute.call_count == 2
         call_args = mock_cur.execute.call_args   # call_args returns the last call (the INSERT)
         assert "INSERT INTO adjectives" in call_args[0][0]  # [0][0] = first positional arg (the SQL string)
-        assert call_args[0][1] == ("brave",)                # [0][1] = second positional arg (the values tuple)
+        assert call_args[0][1] == ("brave", None)            # [0][1] = second positional arg (the values tuple)
 
     def test_increments_existing_word(self):
         mock_conn = MagicMock()
@@ -149,14 +149,14 @@ class TestAddRoute:
         # "as mock_write" gives us a reference so we can inspect calls later
         with patch("app._is_adjective", return_value=True), patch("app.write") as mock_write:
             response = client.post("/", data={"word": "brave"})
-        assert response.status_code == 302          # 302 = redirect (expected after POST)
-        mock_write.assert_called_once_with("brave") # verify write() was called with correct word
+        assert response.status_code == 302               # 302 = redirect (expected after POST)
+        mock_write.assert_called_once_with("brave", None) # verify write() was called with correct word
 
     def test_strips_and_lowercases(self, client):
         # app.py does .strip().lower() — verify "  BRAVE  " becomes "brave"
         with patch("app._is_adjective", return_value=True), patch("app.write") as mock_write:
             client.post("/", data={"word": "  BRAVE  "})
-        mock_write.assert_called_once_with("brave")
+        mock_write.assert_called_once_with("brave", None)
 
     def test_non_adjective_rejected(self, client):
         # spaCy says the word is not an adjective — write() must NOT be called

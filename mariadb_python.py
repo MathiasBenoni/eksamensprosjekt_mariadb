@@ -81,7 +81,6 @@ def get_adjectives():
     conn.close()
     return {adj: count for adj, count in results}
 
-
 def get_adjectives_admin():
     conn = get_connection()
     cur = conn.cursor()

@@ -1,7 +1,7 @@
 # Privacy Policy
 
 **Application:** Adjective Collector
-**Last updated:** 2026-06-10
+**Last updated:** 2026-06-12
 
 ---
 
@@ -13,10 +13,15 @@ Adjective Collector is a web application that crowdsources adjectives from its u
 
 ## 2. Data We Collect
 
-The only data collected by this application is:
+This application collects the following data:
 
 - **Submitted words (adjectives)** — the text you enter into the submission form.
 - **Submission frequency** — how many times a given word has been submitted in total.
+- **Username** — the name you choose when creating an account.
+- **Password hash** — your password is stored as a one-way bcrypt hash; the plaintext password is never retained.
+- **Role** — whether your account has standard user or administrator access.
+- **Submission authorship** — when a new adjective is first submitted, it is linked to the submitter's user ID.
+- **Session data** — a server-side session cookie is used to keep you logged in; it stores your user ID, username, and role for the duration of your session.
 
 All submitted words are automatically converted to lowercase and stripped of leading/trailing whitespace before being stored.
 
@@ -24,14 +29,12 @@ All submitted words are automatically converted to lowercase and stripped of lea
 
 ## 3. Data We Do NOT Collect
 
-This application does **not** collect any personally identifiable information (PII). Specifically, we do not collect:
+This application does **not** collect the following:
 
-- Names, email addresses, or any contact information
+- Real names, email addresses, or other contact information
 - IP addresses or device identifiers
 - Browser type, operating system, or user-agent data
-- Cookies or session data
 - Timestamps of submissions
-- User accounts or authentication credentials
 
 ---
 
@@ -59,9 +62,9 @@ The following measures are in place to protect the application and its data:
 
 - **Input validation:** Empty submissions are rejected; all input is stripped and lowercased before use.
 - **Parameterised queries:** All database queries use parameterised statements to prevent SQL injection.
-- **No session state:** The application does not use cookies or server-side sessions, eliminating session-hijacking risks.
+- **Password hashing:** Passwords are never stored in plaintext. They are hashed using bcrypt before being written to the database.
+- **Session management:** Server-side sessions are used to authenticate logged-in users. Sessions are cleared in full when you log out.
 - **Credential isolation:** Database credentials are stored in a `.env` file outside of version control and never exposed to end users.
-- **Minimal data surface:** Because no personal data is collected, there is no PII at risk in the event of a data breach.
 
 ---
 
@@ -79,7 +82,7 @@ Submitted adjectives and their counters are stored indefinitely in the database 
 
 ## 9. Your Rights
 
-Because this application does not collect any personal data, there is no personal information to access, correct, or delete. If you have submitted a word you would like removed, you may contact the application operator using the details below.
+If you have created an account, you may contact the application operator to request the deletion of your account and any associated data. If you have submitted a word you would like removed, you may also contact the operator using the details below.
 
 ---
 
