@@ -1,6 +1,6 @@
 import matplotlib
 matplotlib.use('Agg')
-from wordcloud import WordCloud
+from wordcloud import WordCloud, ImageColorGenerator
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
@@ -15,6 +15,10 @@ def make_cloud(adjectives: dict):
 
     frequencies = {adj.capitalize(): count for adj, count in adjectives.items()}
 
+    mask_image = Image.open("images/github_green.png").resize((size_x, size_y))
+    python_mask = np.array(mask_image)
+    colourmap = ImageColorGenerator(python_mask)
+
     shared_config = dict(
         max_words=2000,
         width=size_x,
@@ -28,7 +32,7 @@ def make_cloud(adjectives: dict):
     shared_config["mask"] = np.array(mask_image)
     wc = WordCloud(**shared_config, background_color="#1A1E2E")
     wc.generate_from_frequencies(frequencies)
-    #wc.recolor(color_func=_color_dark)
+    wc.recolor(color_func=colourmap)
     wc.to_file("static/images/cloud_dark.png")
 
     # Light version
@@ -36,5 +40,5 @@ def make_cloud(adjectives: dict):
     shared_config["mask"] = np.array(mask_image)
     wc = WordCloud(**shared_config, background_color="#FAF7F2")
     wc.generate_from_frequencies(frequencies)
-    #wc.recolor(color_func=_color_light)
+    wc.recolor(color_func=colourmap)
     wc.to_file("static/images/cloud_light.png")
