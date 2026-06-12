@@ -27,11 +27,46 @@ def ensure_table():
         CREATE TABLE IF NOT EXISTS adjectives (
             adjective VARCHAR(100) PRIMARY KEY,
             counter   INT NOT NULL DEFAULT 1
-        )
+        );
+    """)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id            INT AUTO_INCREMENT PRIMARY KEY,
+            username      VARCHAR(50) UNIQUE NOT NULL,
+            password_hash VARCHAR(255) NOT NULL,
+            role          VARCHAR(20) NOT NULL DEFAULT 'user'
+        );
     """)
     conn.commit()
     cur.close()
     conn.close()
+
+
+def create_user(username: str, password_hash: str) -> None:
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO users (username, password_hash) VALUES (?, ?)",
+        (username, password_hash)
+    )
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
+def get_user(username: str):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT id, username, password_hash, role FROM users WHERE username = ?",
+        (username,)
+    )
+    row = cur.fetchone()
+    cur.close()
+    conn.close()
+    if row is None:
+        return None
+    return {"id": row[0], "username": row[1], "password_hash": row[2], "role": row[3]}
 
 def get_adjectives():
     conn = get_connection()

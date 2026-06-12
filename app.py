@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
-from mariadb_python import get_adjectives, write
+from flask import Flask, render_template, request, redirect, url_for, flash, session
+from mariadb_python import get_adjectives, write, create_user, get_user
 from wordcloud_python import make_cloud
+from hashing import hash_password, check_password
 import markdown
 import spacy
 import time
@@ -69,7 +70,47 @@ def add():
         flash(f'"{word}" doesn\'t look like an adjective!', "error")
         return redirect(url_for("index"))
 
-    
+
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    if request.method == "GET":
+        return render_template("signup.html")
+    username = request.form.get("username", "").strip()
+    password = request.form.get("password", "")
+    if not username or not password:
+        flash("Username and password required.", "error")
+        return redirect(url_for("signup"))
+    if get_user(username):
+        flash("Username already taken.", "error")
+        return redirect(url_for("signup"))
+    create_user(username, hash_password(password))
+    flash("Account created! Please log in.", "success")
+    return redirect(url_for("login"))
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "GET":
+        return render_template("login.html")
+    username = request.form.get("username", "").strip()
+    password = request.form.get("password", "")
+    user = get_user(username)
+    if not user or not check_password(password, user["password_hash"]):
+        flash("Invalid username or password.", "error")
+        return redirect(url_for("login"))
+    session["user_id"] = user["id"]
+    session["username"] = user["username"]
+    session["role"] = user["role"]
+    return redirect(url_for("index"))
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("index"))
+
+
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Log In – Adjective Collector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+    <h1>Adjective Collector</h1>
+</header>
+
+<main>
+    <div class="card">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <p class="flash {{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        <h2>Log In</h2>
+
+        <form method="post">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Your username" required autofocus>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Your password" required>
+
+            <button type="submit">Log in</button>
+        </form>
+
+        <p>No account yet? <a href="{{ url_for('signup') }}">Sign up</a></p>
+
+    </div>
+</main>
+
+</body>
+</html>

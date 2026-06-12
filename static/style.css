@@ -68,6 +68,33 @@ h1 {
     letter-spacing: -0.01em;
 }
 
+/* ── Header nav ─────────────────────────────────────────── */
+.header-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-right: 1.25rem;
+}
+
+.nav-link {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.15s;
+}
+.nav-link:hover { color: var(--accent); }
+
+.nav-link--accent {
+    color: var(--accent);
+    font-weight: 600;
+}
+.nav-link--accent:hover { color: var(--accent-hover); }
+
+.nav-user {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
 /* ── Toggle switch ──────────────────────────────────────── */
 .theme-switch {
     display: flex;
