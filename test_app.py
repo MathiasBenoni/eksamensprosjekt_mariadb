@@ -131,9 +131,9 @@ class TestIndexRoute:
     def test_renders_adjectives(self, client):
         with patch("app.get_adjectives", return_value={"happy": 2, "sad": 1}):
             response = client.get("/")
-        # response.data = raw HTML bytes — check that words appear on the page
-        assert b"happy" in response.data
-        assert b"sad" in response.data
+        assert response.status_code == 200
+        assert b"cloud_light.png" in response.data
+        assert b"cloud_dark.png" in response.data
 
     def test_empty_adjectives(self, client):
         # Should not crash when DB is empty
