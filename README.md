@@ -3,14 +3,18 @@
 # Description
 
 Hi, we run a parenting advice and community forum aimed at mothers and fathers of children aged 0–10. Our audience is mostly 25–40 year olds, a mix of first-time and experienced parents. The tone of our site is warm, supportive, and family-friendly.
-We would like to embed your adjective collector on our front page. Here are our requirements:
-• The prompt should be: "Which word best describes our site?"
-• We need a profanity filter — our audience includes people browsing at work or with kids nearby
-• Only single words should be accepted, no phrases
-• We want the results displayed as a top 10 list, not a full dump of everything submitted
-• We would like a minimum character count of 3 to avoid junk submissions like "ok" or "eh"
-• The moderator dashboard should let us manually remove adjectives we find inappropriate
-Let us know if you need anything else from us.
+We would like to embed your adjective collector on our front page.
+
+Here are our requirements:
+
+- The prompt should be: "Which word best describes our site?"
+- We need a profanity filter — our audience includes people browsing at work or with kids nearby
+- Only single words should be accepted, no phrases
+- We want the results displayed as a top 10 list, not a full dump of everything submitted
+- We would like a minimum character count of 3 to avoid junk submissions like "ok" or "eh"
+- The moderator dashboard should let us manually remove adjectives we find inappropriate
+
+  Let us know if you need anything else from us.
 
 For a parenting site the tone should be warm and approachable, not clinical or cold. I would suggest:
 
