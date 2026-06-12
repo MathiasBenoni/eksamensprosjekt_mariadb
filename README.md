@@ -128,58 +128,11 @@ This now puts you inside mariaDB, if you want to exit mariaDB, just type `EXIT;`
 
 ### Setup your user
 
-```
-CREATE USER 'username'@'localhost' IDENTIFIED BY 'secure_password';
-```
-
-#### The pythonscript uses `pythonuser` as username and `pythonpass`as password
+Choose a username and password and replace the `user` and `password`, then copy into mariadb
 
 ```
-CREATE USER 'pythonuser'@'localhost' IDENTIFIED BY 'pythonpass';
-```
-
-You should now be logged in as root user, even though you just created a new one. The root user has all the privileges, if you want your user that you just created to also have all privileges, you can run
-
-```
-GRANT ALL PRIVILEGES ON *.* TO 'username'@'localhost';
-```
-
-#### Give privileges to a specific database (Recommended)
-
-```
-GRANT SELECT, INSERT, UPDATE ON database_name.* TO 'username'@'localhost';
-```
-
-#### For my script
-
-```
-GRANT SELECT, INSERT, UPDATE ON adjectives.* TO 'pythonuser'@'localhost';
-```
-
-#### After you have done that, you need to save the changes
-
-```
-FLUSH PRIVILEGES;
-```
-
-#### If you are unsure that you have done it correctly you can run
-
-```
-SHOW GRANTS FOR 'pythonuser'@'localhost';
-```
-
-And you should see something like
-
-| Grants for pythonuser@localhost                                                                                |
-| -------------------------------------------------------------------------------------------------------------- |
-| GRANT USAGE ON _._ TO pythonuser@localhost IDENTIFIED BY PASSWORD '\_C85F42CED428CAE393E47738770729D0657BB541' |
-| GRANT SELECT, INSERT, UPDATE ON database_name.\* TO pythonuser@localhost;                                      |
-
-### Complete user-generation
-
-```
-CREATE USER 'pythonuser'@'localhost' IDENTIFIED BY 'pythonpass';
-GRANT SELECT, INSERT UPDATE ON ON adjectives.* TO 'pythonuser'@'localhost';
+CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
+GRANT SELECT, INSERT UPDATE ON ON adjectives.* TO 'user'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
