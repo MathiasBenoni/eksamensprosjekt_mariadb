@@ -8,40 +8,37 @@
 <body>
 
 <header>
-    <span class="brand">Adjective Collector</span>
+    <h1>Adjective Collector</h1>
     <label class="theme-switch" aria-label="Toggle dark mode">
-        <span class="switch-label">Dark</span>
         <input type="checkbox" id="theme-toggle">
         <span class="slider"></span>
+        <span class="switch-label" id="switch-label">Dark mode</span>
     </label>
 </header>
 
 <main>
-    <div class="page-col">
+    <div class="card">
 
-        <p class="section-label">Adjective Collector</p>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <p class="flash {{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
 
-        <div class="form-panel">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% for category, message in messages %}
-                    <p class="flash {{ category }}">{{ message }}</p>
-                {% endfor %}
-            {% endwith %}
+        <form method="post">
+            <label for="word">Which word best describes our site?</label>
+            <input type="text" name="word" placeholder="Enter an adjective" autofocus>
+            <button type="submit">Add</button>
+        </form>
 
-            <form method="post">
-                <label class="field-label" for="word-input">Adjective:</label>
-                <input id="word-input" type="text" name="word" placeholder="This website is..." autofocus>
-                <button type="submit">Add &#x2192;</button>
-            </form>
+        <div class="wordcloud-area">
+            {% if wordcloud %}
+                <img src="{{ wordcloud.light }}?v={{ wordcloud.ts }}" class="wc-img wc-light" alt="Word Cloud">
+                <img src="{{ wordcloud.dark }}?v={{ wordcloud.ts }}"  class="wc-img wc-dark"  alt="Word Cloud">
+            {% else %}
+                <span class="wordcloud-hint">Wordcloud</span>
+            {% endif %}
         </div>
-
-        {% if wordcloud %}
-        <p class="tagline">Thank you &mdash; here are some other things that were said about this website:</p>
-        <div class="cloud-panel">
-            <img src="{{ wordcloud.light }}?v={{ wordcloud.ts }}" class="wc-img wc-light" alt="Word Cloud">
-            <img src="{{ wordcloud.dark }}?v={{ wordcloud.ts }}"  class="wc-img wc-dark"  alt="Word Cloud">
-        </div>
-        {% endif %}
 
     </div>
 </main>
@@ -68,6 +65,7 @@
 
 <script>
     const toggle = document.getElementById('theme-toggle');
+    const label  = document.getElementById('switch-label');
     const root   = document.documentElement;
 
     applyTheme(localStorage.getItem('theme') || 'light');
@@ -81,6 +79,7 @@
     function applyTheme(theme) {
         root.dataset.theme = theme;
         toggle.checked     = theme === 'dark';
+        label.textContent  = theme === 'dark' ? 'Light mode' : 'Dark mode';
     }
 
     const docMeta = {
