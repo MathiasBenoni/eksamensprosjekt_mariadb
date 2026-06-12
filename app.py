@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from mariadb_python import get_adjectives, write
+from wordcloud_python import make_cloud
 import markdown
+import time
 from pathlib import Path
 
 app = Flask(__name__)
@@ -14,9 +16,15 @@ def _load_doc(filename):
 @app.route("/", methods=["GET"])
 def index():
     adjectives = get_adjectives()
+    has_cloud = make_cloud(adjectives) != "NOPE"
+    wordcloud = {
+        "light": url_for("static", filename="images/cloud_light.png"),
+        "dark":  url_for("static", filename="images/cloud_dark.png"),
+        "ts":    int(time.time()),
+    } if has_cloud else None
     return render_template(
         "index.html",
-        adjectives=adjectives,
+        wordcloud=wordcloud,
         privacy_html=_load_doc("privacy_policy.md"),
         terms_html=_load_doc("terms_of_use.md"),
         manual_html=_load_doc("user_manual.md"),

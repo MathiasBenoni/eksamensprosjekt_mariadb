@@ -8,43 +8,40 @@
 <body>
 
 <header>
-    <h1>Adjective Collector</h1>
+    <span class="brand">Adjective Collector</span>
     <label class="theme-switch" aria-label="Toggle dark mode">
+        <span class="switch-label">Dark</span>
         <input type="checkbox" id="theme-toggle">
         <span class="slider"></span>
-        <span class="switch-label" id="switch-label">Dark mode</span>
     </label>
 </header>
 
 <main>
-    <div class="card">
+    <div class="page-col">
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% for category, message in messages %}
-                <p class="flash {{ category }}">{{ message }}</p>
-            {% endfor %}
-        {% endwith %}
+        <p class="section-label">Adjective Collector</p>
 
-        <form method="post">
-            <input type="text" name="word" placeholder="Enter an adjective" autofocus>
-            <button type="submit">Add</button>
-        </form>
-
-        <div class="wordcloud-wrapper">
-            <div class="wordcloud-area">
-                <span class="wordcloud-hint">Wordcloud</span>
-            </div>
-            <div class="debug-overlay">
-                {% for word, count in adjectives.items() %}
-                    <div class="debug-row">
-                        <span class="dw">{{ word }}</span>
-                        <span class="dc">{{ count }}</span>
-                    </div>
-                {% else %}
-                    <div class="debug-empty">No adjectives yet</div>
+        <div class="form-panel">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <p class="flash {{ category }}">{{ message }}</p>
                 {% endfor %}
-            </div>
+            {% endwith %}
+
+            <form method="post">
+                <label class="field-label" for="word-input">Adjective:</label>
+                <input id="word-input" type="text" name="word" placeholder="This website is..." autofocus>
+                <button type="submit">Add &#x2192;</button>
+            </form>
         </div>
+
+        {% if wordcloud %}
+        <p class="tagline">Thank you &mdash; here are some other things that were said about this website:</p>
+        <div class="cloud-panel">
+            <img src="{{ wordcloud.light }}?v={{ wordcloud.ts }}" class="wc-img wc-light" alt="Word Cloud">
+            <img src="{{ wordcloud.dark }}?v={{ wordcloud.ts }}"  class="wc-img wc-dark"  alt="Word Cloud">
+        </div>
+        {% endif %}
 
     </div>
 </main>
@@ -71,7 +68,6 @@
 
 <script>
     const toggle = document.getElementById('theme-toggle');
-    const label  = document.getElementById('switch-label');
     const root   = document.documentElement;
 
     applyTheme(localStorage.getItem('theme') || 'light');
@@ -85,7 +81,6 @@
     function applyTheme(theme) {
         root.dataset.theme = theme;
         toggle.checked     = theme === 'dark';
-        label.textContent  = theme === 'dark' ? 'Light mode' : 'Dark mode';
     }
 
     const docMeta = {
@@ -93,8 +88,8 @@
         terms:   { title: 'Terms of Use',   id: 'doc-terms'   },
         manual:  { title: 'User Manual',    id: 'doc-manual'  },
     };
-    const overlay   = document.getElementById('modal-overlay');
-    const modalBody = document.getElementById('modal-body');
+    const overlay    = document.getElementById('modal-overlay');
+    const modalBody  = document.getElementById('modal-body');
     const modalTitle = document.getElementById('modal-title');
 
     document.querySelectorAll('.doc-link').forEach(btn => {

@@ -3,3 +3,7 @@ mariadb
 python-dotenv
 pytest
 markdown
+wordcloud
+matplotlib
+numpy
+Pillow
